@@ -83,7 +83,7 @@ fun LoginScreen(
             modifier = Modifier.fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(Color.Blue)
         ) {
-            Text("Iniciar Sesión", color = Color.White)
+            Text("Iniciar sesión", color = Color.White)
         }
 
         loginState?.let { state ->

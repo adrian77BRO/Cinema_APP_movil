@@ -21,7 +21,7 @@ sealed class MovieState {
     object Loading : MovieState()
 }
 
-class MovieViewModel(application: Application) : AndroidViewModel(application) {
+class HomeViewModel(application: Application) : AndroidViewModel(application) {
     private val _movieState = MutableLiveData<MovieState>()
     val movieState: LiveData<MovieState> get() = _movieState
 
@@ -57,6 +57,7 @@ class MovieViewModel(application: Application) : AndroidViewModel(application) {
                 if (response.isSuccessful) {
                     response.body()?.let {
                         getMovies()
+                        _movieState.postValue(MovieState.Success(emptyList()))
                     }
                 } else {
                     _movieState.postValue(MovieState.Error("Error al agregar película"))
