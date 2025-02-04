@@ -1,8 +1,10 @@
 package com.example.apptransaccional.login.presentation
 
+import android.app.Application
+import android.content.Context
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.example.apptransaccional.login.data.datasource.LoginService
 import com.example.apptransaccional.login.data.models.LoginRequest
 import kotlinx.coroutines.CoroutineScope
@@ -10,25 +12,16 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 
-/*class LoginViewModel : ViewModel() {
-    private val repository = LoginRepository()
-    val loginResult = MutableLiveData<String>()
+sealed class LoginState {
+    data class Success(val username: String, val token: String) : LoginState()
+    data class Error(val message: String) : LoginState()
+}
 
-    fun login(username: String, password: String) {
-        viewModelScope.launch {
-            val response = repository.login(username, password)
-            if (response.isSuccessful) {
-                loginResult.postValue("Login exitoso")
-            } else {
-                loginResult.postValue("Error en login")
-            }
-        }
-    }
-}*/
+class LoginViewModel(application: Application) : AndroidViewModel(application) {
+    private val _loginState = MutableLiveData<LoginState?>()
+    val loginState: LiveData<LoginState?> get() = _loginState
 
-class LoginViewModel : ViewModel() {
-    private val _loginResult = MutableLiveData<String?>()
-    val loginResult: LiveData<String?> get() = _loginResult
+    private val sharedPreferences = application.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
 
     fun login(email: String, password: String) {
         CoroutineScope(Dispatchers.IO).launch {
@@ -37,9 +30,18 @@ class LoginViewModel : ViewModel() {
                 if (response.isSuccessful) {
                     val loginResponse = response.body()
                     if (loginResponse?.status == "success") {
-                        _loginResult.postValue("Bienvenido ${loginResponse.user?.username}")
+                        val username = loginResponse.user?.username ?: "Usuario"
+                        val token = loginResponse.token ?: ""
+
+                        sharedPreferences.edit().apply {
+                            putString("username", username)
+                            putString("token", token)
+                            apply()
+                        }
+
+                        _loginState.postValue(LoginState.Success(username, token))
                     } else {
-                        _loginResult.postValue(loginResponse?.message ?: "Error desconocido")
+                        _loginState.postValue(LoginState.Error(loginResponse?.message ?: "Error desconocido"))
                     }
                 } else {
                     val errorBody = response.errorBody()?.string()
@@ -51,10 +53,10 @@ class LoginViewModel : ViewModel() {
                         }
                     } ?: "Error de servidor"
 
-                    _loginResult.postValue(errorMessage)
+                    _loginState.postValue(LoginState.Error(errorMessage))
                 }
             } catch (e: Exception) {
-                _loginResult.postValue("Error de conexión: ${e.localizedMessage}")
+                _loginState.postValue(LoginState.Error("Error de conexión: ${e.localizedMessage}"))
             }
         }
     }
