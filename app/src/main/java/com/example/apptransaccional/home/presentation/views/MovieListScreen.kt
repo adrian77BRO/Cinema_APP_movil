@@ -1,4 +1,4 @@
-package com.example.apptransaccional.home.presentation
+package com.example.apptransaccional.home.presentation.views
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -23,6 +23,8 @@ import androidx.compose.ui.unit.sp
 import com.example.apptransaccional.home.data.models.Movie
 import androidx.navigation.NavController
 import com.example.apptransaccional.R
+import com.example.apptransaccional.home.presentation.viewmodel.HomeViewModel
+import com.example.apptransaccional.home.presentation.viewmodel.MovieState
 
 @Composable
 fun MovieListScreen(navController: NavController, movieViewModel: HomeViewModel) {

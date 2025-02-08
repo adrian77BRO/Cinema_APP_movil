@@ -7,10 +7,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.app.ui.LoginScreen
 import com.example.app.ui.RegisterScreen
-import com.example.apptransaccional.home.presentation.AddMovieScreen
-import com.example.apptransaccional.home.presentation.HomeScreen
-import com.example.apptransaccional.home.presentation.HomeViewModel
-import com.example.apptransaccional.home.presentation.MovieListScreen
+import com.example.apptransaccional.home.presentation.views.AddMovieScreen
+import com.example.apptransaccional.home.presentation.views.HomeScreen
+import com.example.apptransaccional.home.presentation.viewmodel.HomeViewModel
+import com.example.apptransaccional.home.presentation.views.MovieListScreen
+import com.example.apptransaccional.home.presentation.views.ProfileScreen
+import com.example.apptransaccional.home.presentation.viewmodel.ProfileViewModel
 
 @Composable
 fun NavigationGraph(navController: NavHostController) {
@@ -27,7 +29,6 @@ fun NavigationGraph(navController: NavHostController) {
         }
         composable("register") {
             RegisterScreen(
-                onRegisterSuccess = { /*navController.navigate("login")*/ },
                 onNavigateToLogin = { navController.navigate("login") }
             )
         }
@@ -42,6 +43,11 @@ fun NavigationGraph(navController: NavHostController) {
         composable("addMovie") {
             val movieViewModel: HomeViewModel = viewModel()
             AddMovieScreen(navController, movieViewModel)
+        }
+        composable("profile/{username}") { backStackEntry ->
+            val username = backStackEntry.arguments?.getString("username") ?: "Usuario"
+            val profileViewModel: ProfileViewModel = viewModel()
+            ProfileScreen(username, profileViewModel)
         }
     }
 }

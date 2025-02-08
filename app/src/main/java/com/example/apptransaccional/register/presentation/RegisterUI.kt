@@ -23,7 +23,6 @@ import com.example.apptransaccional.register.presentation.RegisterViewModel
 @Composable
 fun RegisterScreen(
     registerViewModel: RegisterViewModel = viewModel(),
-    onRegisterSuccess: () -> Unit,
     onNavigateToLogin: () -> Unit
 ) {
     var username by remember { mutableStateOf("") }
@@ -51,13 +50,10 @@ fun RegisterScreen(
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = Color.Black,
                 unfocusedContainerColor = Color.Black,
-                disabledContainerColor = Color.Black,
                 focusedTextColor = Color.White,
                 unfocusedTextColor = Color.White,
-                disabledTextColor = Color.Gray,
                 focusedIndicatorColor = Color.Blue,
                 unfocusedIndicatorColor = Color.Blue,
-                disabledIndicatorColor = Color.Gray
             )
         )
 
@@ -71,13 +67,10 @@ fun RegisterScreen(
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = Color.Black,
                 unfocusedContainerColor = Color.Black,
-                disabledContainerColor = Color.Black,
                 focusedTextColor = Color.White,
                 unfocusedTextColor = Color.White,
-                disabledTextColor = Color.Gray,
                 focusedIndicatorColor = Color.Blue,
                 unfocusedIndicatorColor = Color.Blue,
-                disabledIndicatorColor = Color.Gray
             )
         )
 
@@ -92,13 +85,10 @@ fun RegisterScreen(
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = Color.Black,
                 unfocusedContainerColor = Color.Black,
-                disabledContainerColor = Color.Black,
                 focusedTextColor = Color.White,
                 unfocusedTextColor = Color.White,
-                disabledTextColor = Color.Gray,
                 focusedIndicatorColor = Color.Blue,
                 unfocusedIndicatorColor = Color.Blue,
-                disabledIndicatorColor = Color.Gray
             )
         )
 

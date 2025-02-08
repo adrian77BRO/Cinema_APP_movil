@@ -1,14 +1,17 @@
-package com.example.apptransaccional.home.presentation
+package com.example.apptransaccional.home.presentation.views
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -25,14 +28,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.apptransaccional.home.data.models.MovieRequest
+import com.example.apptransaccional.home.presentation.viewmodel.HomeViewModel
 
 @Composable
 fun AddMovieScreen(navController: NavController, movieViewModel: HomeViewModel) {
     var title by remember { mutableStateOf("") }
     var year by remember { mutableStateOf("") }
     var category by remember { mutableStateOf("") }
-    var stars by remember { mutableStateOf("") }
-    val movieState by movieViewModel.movieState.observeAsState()
+    var stars by remember { mutableStateOf(0) }
     val context = LocalContext.current
 
     Scaffold(
@@ -65,19 +68,38 @@ fun AddMovieScreen(navController: NavController, movieViewModel: HomeViewModel) 
             CustomTextField("Título", title) { title = it }
             CustomTextField("Año", year, keyboardType = KeyboardType.Number) { year = it }
             CustomTextField("Categoría", category) { category = it }
-            CustomTextField("Calificación (1-5)", stars, keyboardType = KeyboardType.Number) { stars = it }
+            //CustomTextField("Calificación (1-5)", stars, keyboardType = KeyboardType.Number) { stars = it }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Text(text = "Calificación:", color = Color.White, fontSize = 18.sp)
+            Row(
+                modifier = Modifier.padding(vertical = 8.dp),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                for (i in 1..5) {
+                    IconButton(onClick = { stars = i }) {
+                        Icon(
+                            imageVector = if (i <= stars) Icons.Filled.Star else Icons.Outlined.Star,
+                            contentDescription = "Calificación $i estrellas",
+                            tint = if (i <= stars) Color.Yellow else Color.White,
+                            modifier = Modifier.size(40.dp)
+                        )
+                    }
+                }
+            }
 
             Spacer(modifier = Modifier.height(16.dp))
             Button(
                 onClick = {
-                    if (title.isBlank() || year.isBlank() || category.isBlank() || stars.isBlank()) {
+                    if (title.isBlank() || year.isBlank() || category.isBlank() || stars == 0) {
                         Toast.makeText(context, "Todos los campos son obligatorios", Toast.LENGTH_SHORT).show()
                     } else {
                         val movieRequest = MovieRequest(
                             title,
                             year.toIntOrNull() ?: 0,
                             category,
-                            stars.toIntOrNull() ?: 0
+                            stars
                         )
                         movieViewModel.createMovie(movieRequest)
                     }
