@@ -1,6 +1,5 @@
 package com.example.apptransaccional.home.data.datasource
 
-import com.example.apptransaccional.core.network.RetrofitClient
 import com.example.apptransaccional.home.data.models.MovieDTO
 import com.example.apptransaccional.home.data.models.MovieRequest
 import com.example.apptransaccional.home.data.models.MoviesDTO
@@ -20,10 +19,4 @@ interface MovieService {
 
     @POST("movies")
     suspend fun createMovie(@Header("Authorization") token: String, @Body movie: MovieRequest): Response<MovieDTO>
-
-    companion object {
-        val api: MovieService by lazy {
-            RetrofitClient.instance.create(MovieService::class.java)
-        }
-    }
 }

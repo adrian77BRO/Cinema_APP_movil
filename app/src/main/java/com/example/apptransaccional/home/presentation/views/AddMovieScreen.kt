@@ -17,7 +17,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -68,10 +67,8 @@ fun AddMovieScreen(navController: NavController, movieViewModel: HomeViewModel) 
             CustomTextField("Título", title) { title = it }
             CustomTextField("Año", year, keyboardType = KeyboardType.Number) { year = it }
             CustomTextField("Categoría", category) { category = it }
-            //CustomTextField("Calificación (1-5)", stars, keyboardType = KeyboardType.Number) { stars = it }
 
             Spacer(modifier = Modifier.height(16.dp))
-
             Text(text = "Calificación:", color = Color.White, fontSize = 18.sp)
             Row(
                 modifier = Modifier.padding(vertical = 8.dp),

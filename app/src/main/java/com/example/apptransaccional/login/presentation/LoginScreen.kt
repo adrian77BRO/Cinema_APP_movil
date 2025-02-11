@@ -1,4 +1,4 @@
-package com.example.app.ui
+package com.example.apptransaccional.login.presentation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -18,17 +18,17 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.apptransaccional.register.presentation.RegisterViewModel
+import com.example.apptransaccional.login.data.models.LoginState
 
 @Composable
-fun RegisterScreen(
-    registerViewModel: RegisterViewModel = viewModel(),
-    onNavigateToLogin: () -> Unit
+fun LoginScreen(
+    loginViewModel: LoginViewModel = viewModel(),
+    onLoginSuccess: (String) -> Unit,
+    onNavigateToRegister: () -> Unit
 ) {
-    var username by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    val registerResult by registerViewModel.registerResult.observeAsState()
+    val loginState by loginViewModel.loginState.observeAsState()
 
     Column(
         modifier = Modifier
@@ -38,26 +38,9 @@ fun RegisterScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Registro", style = MaterialTheme.typography.headlineMedium, color = Color.White)
+        Text("Iniciar sesión", style = MaterialTheme.typography.headlineMedium, color = Color.White)
 
         Spacer(modifier = Modifier.height(20.dp))
-
-        OutlinedTextField(
-            value = username,
-            onValueChange = { username = it },
-            label = { Text("Usuario") },
-            modifier = Modifier.fillMaxWidth(),
-            colors = TextFieldDefaults.colors(
-                focusedContainerColor = Color.Black,
-                unfocusedContainerColor = Color.Black,
-                focusedTextColor = Color.White,
-                unfocusedTextColor = Color.White,
-                focusedIndicatorColor = Color.Blue,
-                unfocusedIndicatorColor = Color.Blue,
-            )
-        )
-
-        Spacer(modifier = Modifier.height(10.dp))
 
         OutlinedTextField(
             value = email,
@@ -70,7 +53,7 @@ fun RegisterScreen(
                 focusedTextColor = Color.White,
                 unfocusedTextColor = Color.White,
                 focusedIndicatorColor = Color.Blue,
-                unfocusedIndicatorColor = Color.Blue,
+                unfocusedIndicatorColor = Color.Blue
             )
         )
 
@@ -88,33 +71,43 @@ fun RegisterScreen(
                 focusedTextColor = Color.White,
                 unfocusedTextColor = Color.White,
                 focusedIndicatorColor = Color.Blue,
-                unfocusedIndicatorColor = Color.Blue,
+                unfocusedIndicatorColor = Color.Blue
             )
         )
 
         Spacer(modifier = Modifier.height(20.dp))
 
         Button(
-            onClick = { registerViewModel.register(username, email, password) },
+            onClick = { loginViewModel.login(email, password) },
             modifier = Modifier.fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(Color.Blue)
         ) {
-            Text("Registrarse", color = Color.White)
+            Text("Iniciar sesión", color = Color.White)
         }
 
-        registerResult?.let { message ->
+        loginState?.let { state ->
             Spacer(modifier = Modifier.height(10.dp))
-            Text(
-                text = message,
-                color = if (message.contains("exitoso", ignoreCase = true)) Color.Green else Color.Red
-            )
+            when (state) {
+                is LoginState.Success -> {
+                    Text(
+                        text = "Bienvenido, ${state.username}",
+                        color = Color.Green
+                    )
+                    LaunchedEffect(Unit) {
+                        onLoginSuccess(state.username)
+                    }
+                }
+                is LoginState.Error -> {
+                    Text(text = state.message, color = Color.Red)
+                }
+            }
         }
 
         Spacer(modifier = Modifier.height(20.dp))
 
         ClickableText(
-            text = AnnotatedString("¿Ya tienes cuenta? Inicia sesión aquí"),
-            onClick = { onNavigateToLogin() },
+            text = AnnotatedString("¿No tienes cuenta? Regístrate aquí"),
+            onClick = { onNavigateToRegister() },
             style = MaterialTheme.typography.bodyMedium.copy(color = Color.Blue)
         )
     }

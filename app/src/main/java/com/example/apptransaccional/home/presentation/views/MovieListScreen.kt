@@ -23,8 +23,8 @@ import androidx.compose.ui.unit.sp
 import com.example.apptransaccional.home.data.models.Movie
 import androidx.navigation.NavController
 import com.example.apptransaccional.R
+import com.example.apptransaccional.home.data.models.MovieState
 import com.example.apptransaccional.home.presentation.viewmodel.HomeViewModel
-import com.example.apptransaccional.home.presentation.viewmodel.MovieState
 
 @Composable
 fun MovieListScreen(navController: NavController, movieViewModel: HomeViewModel) {

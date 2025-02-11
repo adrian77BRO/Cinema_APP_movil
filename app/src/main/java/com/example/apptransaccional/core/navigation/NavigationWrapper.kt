@@ -5,8 +5,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.app.ui.LoginScreen
-import com.example.app.ui.RegisterScreen
+import com.example.apptransaccional.login.presentation.LoginScreen
+import com.example.apptransaccional.register.presentation.RegisterScreen
 import com.example.apptransaccional.home.presentation.views.AddMovieScreen
 import com.example.apptransaccional.home.presentation.views.HomeScreen
 import com.example.apptransaccional.home.presentation.viewmodel.HomeViewModel
